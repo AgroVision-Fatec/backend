@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { FazendasModule } from './fazendas/fazendas.module';
 import { TalhoesModule } from './talhoes/talhoes.module';
+import { ArmadilhasModule } from './armadilhas/armadilhas.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TalhoesModule } from './talhoes/talhoes.module';
     AuthModule,
     FazendasModule,
     TalhoesModule,
+    ArmadilhasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

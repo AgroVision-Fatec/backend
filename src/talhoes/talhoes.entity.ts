@@ -4,8 +4,10 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Fazenda } from 'src/fazendas/fazenda.entity'; // Assumindo que você tem uma entidade Fazenda
+import { Armadilha } from 'src/armadilhas/armadilhas.entity';
 
 @Entity('talhoes') // O nome da tabela no banco de dados
 export class Talhao {
@@ -27,4 +29,7 @@ export class Talhao {
   @ManyToOne(() => Fazenda, (fazenda) => fazenda.talhoes)
   @JoinColumn({ name: 'id_fazenda' }) // Coluna que estabelece a relação
   fazenda: Fazenda;
+
+  @OneToMany(() => Armadilha, (armadilha) => armadilha.talhao)
+  armadilhas: Armadilha[];
 }
