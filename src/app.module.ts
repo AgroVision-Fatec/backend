@@ -9,6 +9,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { FazendasModule } from './fazendas/fazendas.module';
 import { TalhoesModule } from './talhoes/talhoes.module';
 import { ArmadilhasModule } from './armadilhas/armadilhas.module';
+import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ArmadilhasModule } from './armadilhas/armadilhas.module';
     FazendasModule,
     TalhoesModule,
     ArmadilhasModule,
+    DadosArmadilhasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
