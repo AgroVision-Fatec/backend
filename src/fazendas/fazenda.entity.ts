@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Talhao } from 'src/talhoes/talhoes.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Fazenda {
@@ -13,4 +14,7 @@ export class Fazenda {
 
   @Column('text')
   coordenadas: string;
+
+  @OneToMany(() => Talhao, (talhao) => talhao.fazenda)
+  talhoes: Talhao[];
 }

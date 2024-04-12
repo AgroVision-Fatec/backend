@@ -24,7 +24,6 @@ import { UserResponseDto } from './dto/response-user.dto';
 import { UserDeleteResponseDto } from './dto/response-delete-user.dto';
 
 @ApiTags('usuários')
-@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -43,6 +42,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Obter todos os usuários' })
   @ApiResponse({
@@ -55,6 +55,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get(':id')
   @ApiOperation({ summary: 'Obter um usuário pelo ID' })
   @ApiResponse({
@@ -74,6 +75,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar um usuário' })
   @ApiResponse({
@@ -97,6 +99,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar um usuário' })
   @ApiResponse({

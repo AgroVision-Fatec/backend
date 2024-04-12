@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { FazendasModule } from './fazendas/fazendas.module';
+import { TalhoesModule } from './talhoes/talhoes.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FazendasModule } from './fazendas/fazendas.module';
     UsersModule,
     AuthModule,
     FazendasModule,
+    TalhoesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

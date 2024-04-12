@@ -13,7 +13,6 @@ import {
 import { FazendasService } from './fazendas.service';
 import { CreateFazendaDto } from './dto/create-fazenda.dto';
 import { UpdateFazendaDto } from './dto/update-fazenda.dto';
-import { Fazenda } from './fazenda.entity';
 import {
   ApiTags,
   ApiOperation,
