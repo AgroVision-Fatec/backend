@@ -1,41 +1,52 @@
+// src/fazendas/fazendas.controller.ts
+
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Post,
+  Body,
+  Param,
   Put,
+  Delete,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { Fazenda } from './fazenda.entity';
 import { FazendasService } from './fazendas.service';
+import { CreateFazendaDto } from './dto/create-fazenda.dto';
+import { UpdateFazendaDto } from './dto/update-fazenda.dto';
+import { Fazenda } from './fazenda.entity';
 
 @Controller('fazendas')
 export class FazendasController {
   constructor(private readonly fazendasService: FazendasService) {}
 
   @Post()
-  create(@Body() fazendaData: Fazenda) {
-    return this.fazendasService.create(fazendaData);
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  async create(@Body() createFazendaDto: CreateFazendaDto): Promise<Fazenda> {
+    return this.fazendasService.create(createFazendaDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Fazenda[]> {
     return this.fazendasService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number): Promise<Fazenda> {
     return this.fazendasService.findOne(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() fazendaData: Partial<Fazenda>) {
-    return this.fazendasService.update(id, fazendaData);
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  async update(
+    @Param('id') id: number,
+    @Body() updateFazendaDto: UpdateFazendaDto,
+  ): Promise<Fazenda> {
+    return this.fazendasService.update(id, updateFazendaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<void> {
     return this.fazendasService.remove(id);
   }
 }
