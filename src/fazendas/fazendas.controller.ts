@@ -1,5 +1,3 @@
-// src/fazendas/fazendas.controller.ts
-
 import {
   Controller,
   Get,
