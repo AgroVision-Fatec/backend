@@ -10,12 +10,13 @@ import { FazendasModule } from './fazendas/fazendas.module';
 import { TalhoesModule } from './talhoes/talhoes.module';
 import { ArmadilhasModule } from './armadilhas/armadilhas.module';
 import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.module';
+import { GeojsonModule } from './geojson/geojson.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // torna as variáveis de ambiente disponíveis globalmente
-      envFilePath: '.env',  // Localização do seu arquivo .env
+      envFilePath: '.env', // Localização do seu arquivo .env
     }),
     TypeOrmModule.forRoot({
       type: 'mysql', // ou qualquer outro banco de dados suportado
@@ -41,6 +42,7 @@ import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.modul
     TalhoesModule,
     ArmadilhasModule,
     DadosArmadilhasModule,
+    GeojsonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
