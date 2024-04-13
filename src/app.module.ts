@@ -15,6 +15,7 @@ import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.modul
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // torna as variáveis de ambiente disponíveis globalmente
+      envFilePath: '.env',  // Localização do seu arquivo .env
     }),
     TypeOrmModule.forRoot({
       type: 'mysql', // ou qualquer outro banco de dados suportado
