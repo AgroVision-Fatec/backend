@@ -1,12 +1,15 @@
-import { Controller, UseGuards, Post, Request } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Post,
+  Body,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -15,14 +18,20 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  @ApiOperation({ summary: 'Log in a user' })
+  @ApiOperation({ summary: 'Efetuar o login de um usuário' })
+  @ApiBody({
+    type: LoginDto,
+    description: 'Credenciais necessárias para o login.',
+  })
   @ApiResponse({
     status: 201,
-    description: 'User successfully logged in',
-    schema: { example: { accessToken: 'jwt-token-here' } },
+    description: 'Usuário logado com sucesso',
+    schema: { type: 'object', example: { accessToken: 'jwt-token-aqui' } },
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  @ApiResponse({ status: 400, description: 'Requisição Incorreta' })
+  @ApiResponse({ status: 401, description: 'Não Autorizado' })
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 }

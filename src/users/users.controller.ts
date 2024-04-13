@@ -19,6 +19,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { UserResponseDto } from './dto/response-user.dto';
 import { UserDeleteResponseDto } from './dto/response-delete-user.dto';
@@ -45,6 +46,12 @@ export class UsersController {
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Obter todos os usuários' })
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Token de acesso JWT',
+    required: true,
+    schema: { type: 'string', example: 'Bearer YOUR_JWT_TOKEN_HERE' },
+  })
   @ApiResponse({
     status: 200,
     description: 'Operação bem-sucedida',

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,10 +20,19 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.userId };
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+    // Implementar lógica de verificação de email e senha, retornar o token se válido
+    const user = await this.validateUser(email, password);
+    if (!user) {
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign({
+        sub: user.id_usuario,
+        nome: user.nome,
+        email: user.email,
+      }),
     };
   }
 }
