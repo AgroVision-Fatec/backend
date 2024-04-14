@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -17,10 +17,10 @@ import { FazendasModule } from '../fazendas/fazendas.module';
         },
       }),
     }),
-    FazendasModule,  // Certifique-se de que FazendasModule esteja importado aqui
+    forwardRef(() => FazendasModule), // Usando forwardRef para evitar dependência circular
   ],
   controllers: [GeojsonController],
-  providers: [GeojsonService], // Certifique-se de que GeojsonService esteja fornecido aqui
-  exports: [GeojsonService], // Exporte GeojsonService para que esteja disponível em outros módulos, se necessário
+  providers: [GeojsonService],
+  exports: [GeojsonService, MulterModule], // Exportando o GeojsonService e MulterModule
 })
 export class GeojsonModule {}

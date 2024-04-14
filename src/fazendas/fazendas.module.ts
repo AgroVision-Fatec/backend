@@ -1,15 +1,18 @@
-import { Module } from '@nestjs/common';
-import { FazendasService } from './fazendas.service';
-import { FazendasController } from './fazendas.controller';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Fazenda } from './fazenda.entity';
-import { GeojsonModule } from 'src/geojson/geojson.module';
+import { FazendasService } from './fazendas.service';
+import { FazendasController } from './fazendas.controller';
+import { GeojsonModule } from '../geojson/geojson.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Fazenda]),
-    GeojsonModule],
+  imports: [
+    TypeOrmModule.forFeature([Fazenda]),
+    forwardRef(() => GeojsonModule), // Usando forwardRef para evitar dependência circular
+  ],
   providers: [FazendasService],
   controllers: [FazendasController],
-  exports: [FazendasService],
+  exports: [FazendasService], // Exportando FazendasService
 })
-export class FazendasModule { }
+
+export class FazendasModule {}
