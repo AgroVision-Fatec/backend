@@ -6,48 +6,48 @@ import {
   Param,
   Put,
   Delete,
-  UseGuards,
+  // UseGuards,
   ValidationPipe,
   UsePipes,
 } from '@nestjs/common';
 import { FazendasService } from './fazendas.service';
-import { CreateFazendaDto } from './dto/create-fazenda.dto';
+// import { CreateFazendaDto } from './dto/create-fazenda.dto';
 import { UpdateFazendaDto } from './dto/update-fazenda.dto';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  // ApiBearerAuth,
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+// import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FazendaDeleteResponseDto } from './dto/response-delete-fazenda.dto';
 import { FazendaResponseDto } from './dto/response-fazenda.dto';
 
 @ApiTags('fazendas')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+// @ApiBearerAuth()
+// @UseGuards(JwtAuthGuard)
 @Controller('fazendas')
 export class FazendasController {
   constructor(private readonly fazendasService: FazendasService) {}
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @ApiOperation({ summary: 'Criar uma nova fazenda' })
+  @ApiOperation({ summary: 'Criar novas fazendas a partir de um arquivo GeoJSON' })
   @ApiResponse({
     status: 201,
-    description: 'A fazenda foi criada com sucesso.',
-    type: FazendaResponseDto,
+    description: 'As fazendas foram criadas com sucesso.',
+    type: [FazendaResponseDto],
   })
   @ApiBody({
-    type: CreateFazendaDto,
-    description: 'Dados necessários para criar uma fazenda',
+    description: 'Caminho do arquivo GeoJSON',
   })
-  async create(
-    @Body() createFazendaDto: CreateFazendaDto,
-  ): Promise<FazendaResponseDto> {
-    return this.fazendasService.create(createFazendaDto);
+  async createFromGeoJSON(
+    @Body('filePath') filePath: string,
+  ): Promise<FazendaResponseDto[]> {
+    const fazendas = await this.fazendasService.createFromGeoJSON(filePath);
+    return fazendas.map(() => new FazendaResponseDto());
   }
 
   @Get()
