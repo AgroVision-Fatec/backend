@@ -10,7 +10,7 @@ export class CreateFazendaDto {
   @IsNotEmpty()
   @IsString()
   @Length(1, 100)
-  nome: string;
+  nome_fazenda: string;
 
   @ApiProperty({
     description:
@@ -20,14 +20,12 @@ export class CreateFazendaDto {
   })
   @IsOptional()
   @IsString()
-  tipoCoordenada?: string;
+  tipo_Coordenadas?: string;
 
   @ApiProperty({
-    description: 'Coordenadas da localização da fazenda',
-    required: false,
-    example: '-15.7942287,-47.8821658',
+    description: 'ID do usuário dono da fazenda',
+    example: 1,
   })
-  @IsOptional()
-  @IsString()
-  coordenadas?: string;
+  @IsNotEmpty()
+  id_usuario: number;
 }

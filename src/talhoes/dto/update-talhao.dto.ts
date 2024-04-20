@@ -25,7 +25,7 @@ export class UpdateTalhaoDto {
     description: 'Coordenadas do talhão',
     required: false,
   })
-  @IsString()
+  @IsInt()
   @IsOptional()
-  coordenadas?: string;
+  id_fazenda?: number;
 }

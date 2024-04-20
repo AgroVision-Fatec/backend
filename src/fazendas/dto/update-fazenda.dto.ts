@@ -11,7 +11,7 @@ export class UpdateFazendaDto {
   @IsOptional()
   @IsString()
   @Length(1, 100)
-  nome?: string;
+  nome_fazenda?: string;
 
   @ApiProperty({
     description:
@@ -21,14 +21,6 @@ export class UpdateFazendaDto {
   })
   @IsOptional()
   @IsString()
-  tipoCoordenada?: string;
+  tipo_Coordenadas?: string;
 
-  @ApiProperty({
-    description: 'Coordenadas da localização da fazenda',
-    example: '-15.7942287,-47.8821658',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  coordenadas?: string;
 }

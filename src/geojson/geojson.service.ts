@@ -15,4 +15,6 @@ export class GeojsonService {
       throw new Error('Unable to read the file: ' + error.message);
     }
   }
+
+  
 }
