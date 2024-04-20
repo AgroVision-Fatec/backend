@@ -1,3 +1,4 @@
+// src/users/users.controller.ts
 import {
   Controller,
   Post,
@@ -9,8 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   ApiTags,
@@ -19,9 +18,10 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
-  ApiHeader,
 } from '@nestjs/swagger';
 import { UserResponseDto } from './dto/response-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDeleteResponseDto } from './dto/response-delete-user.dto';
 
 @ApiTags('usuários')
@@ -46,12 +46,6 @@ export class UsersController {
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Obter todos os usuários' })
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Token de acesso JWT',
-    required: true,
-    schema: { type: 'string', example: 'Bearer YOUR_JWT_TOKEN_HERE' },
-  })
   @ApiResponse({
     status: 200,
     description: 'Operação bem-sucedida',
@@ -67,16 +61,11 @@ export class UsersController {
   @ApiOperation({ summary: 'Obter um usuário pelo ID' })
   @ApiResponse({
     status: 200,
-    description: 'Operação bem-sucedida',
+    description: 'Usuário encontrado',
     type: UserResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'ID do usuário',
-    type: Number,
-  })
+  @ApiParam({ name: 'id', description: 'ID do usuário' })
   async findOne(@Param('id') id: number): Promise<UserResponseDto> {
     return this.usersService.findOne(id);
   }
@@ -87,16 +76,11 @@ export class UsersController {
   @ApiOperation({ summary: 'Atualizar um usuário' })
   @ApiResponse({
     status: 200,
-    description: 'O usuário foi atualizado com sucesso.',
+    description: 'Usuário atualizado com sucesso',
     type: UserResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'ID do usuário',
-    type: Number,
-  })
+  @ApiParam({ name: 'id', description: 'ID do usuário' })
   @ApiBody({ type: UpdateUserDto })
   async update(
     @Param('id') id: number,
@@ -110,18 +94,13 @@ export class UsersController {
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar um usuário' })
   @ApiResponse({
-    status: 200, // Status alterado para 200 se você está retornando conteúdo na resposta.
-    description: 'O usuário foi deletado com sucesso.',
+    status: 200,
+    description: 'Usuário deletado com sucesso.',
     type: UserDeleteResponseDto,
   })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'ID do usuário',
-    type: Number,
-  })
+  @ApiParam({ name: 'id', description: 'ID do usuário' })
   async remove(@Param('id') id: number): Promise<UserDeleteResponseDto> {
     await this.usersService.remove(id);
-    return { message: 'Usuário deletado com sucesso.' }; // Retorna a mensagem de sucesso
+    return { message: 'Usuário deletado com sucesso.' };
   }
 }

@@ -1,15 +1,28 @@
+// src/users/dto/user-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserResponseDto {
-  @ApiProperty({ example: 1, description: 'ID do usuário' })
+  @ApiProperty({
+    description: 'ID do usuário',
+    example: 1,
+  })
   id_usuario: number;
 
-  @ApiProperty({ example: 'John Doe', description: 'Nome do usuário' })
+  @ApiProperty({
+    description: 'Nome completo do usuário',
+    example: 'John Doe',
+  })
   nome: string;
 
-  @ApiProperty({ example: 'john@example.com', description: 'Email do usuário' })
+  @ApiProperty({
+    description: 'Endereço de e-mail do usuário',
+    example: 'john.doe@example.com',
+  })
   email: string;
 
-  @ApiProperty({ example: 1234567890, description: 'Telefone do usuário' })
-  telefone: number;
+  @ApiProperty({
+    description: 'Número de telefone do usuário',
+    example: '+1234567890',
+  })
+  telefone: string; // Ensure this is consistently a string
 }
