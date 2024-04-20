@@ -1,43 +1,41 @@
+// src/users/dto/update-user.dto.ts
 import {
   IsString,
   IsEmail,
   IsOptional,
   MinLength,
-  IsNumber,
+  IsPhoneNumber,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateUserDto {
-  @ApiProperty({
-    example: 'John Doe',
-    description: 'Nome do usuário',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Nome completo do usuário',
+    example: 'Jane Doe',
   })
   @IsString()
   @IsOptional()
   nome?: string;
 
-  @ApiProperty({
-    example: 'john@example.com',
-    description: 'Email do usuário',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Endereço de e-mail do usuário atualizado',
+    example: 'jane.doe@example.com',
   })
   @IsEmail()
   @IsOptional()
   email?: string;
 
-  @ApiProperty({
-    example: '1234567890',
-    description: 'Telefone do usuário',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Número de telefone atualizado do usuário',
+    example: '+1234567890',
   })
-  @IsNumber()
-  telefone?: number;
+  @IsString() // Ensure this matches the entity definition
+  @IsOptional()
+  telefone?: string;
 
-  @ApiProperty({
-    example: 'N3wP4ssw0rd',
-    description: 'Senha do usuário',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Nova senha do usuário com mínimo de 8 caracteres',
+    example: 'newStrongPassword123',
   })
   @IsString()
   @MinLength(8)
