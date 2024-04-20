@@ -13,12 +13,6 @@ export class TalhaoResponseDto {
   })
   tipo_coordenada: string;
 
-  @ApiProperty({
-    example: '-15.7942287,-47.8821658',
-    description: 'Coordenadas do talhão',
-  })
-  coordenadas: string;
-
   @ApiProperty({ example: 1, description: 'ID da fazenda associada' })
   id_fazenda: number;
 }

@@ -14,16 +14,7 @@ export class CreateTalhaoDto {
   })
   @IsString()
   @IsOptional()
-  tipo_coordenada?: string;
-
-  @ApiProperty({
-    example: '-15.7942287,-47.8821658',
-    description: 'Coordenadas do talhão',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  coordenadas?: string;
+  tipo_coordenadas?: string;
 
   @ApiProperty({
     example: 1,

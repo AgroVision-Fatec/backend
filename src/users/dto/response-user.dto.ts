@@ -9,4 +9,7 @@ export class UserResponseDto {
 
   @ApiProperty({ example: 'john@example.com', description: 'Email do usuário' })
   email: string;
+
+  @ApiProperty({ example: 1234567890, description: 'Telefone do usuário' })
+  telefone: number;
 }
