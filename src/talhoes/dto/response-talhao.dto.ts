@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TalhaoResponseDto {
-  @ApiProperty({ example: 1, description: 'ID do talhão' })
+  @ApiProperty()
   id_talhao: number;
 
-  @ApiProperty({ example: 'Talhão 1', description: 'Nome do talhão' })
+  @ApiProperty()
   nome_talhao: string;
 
   @ApiProperty({

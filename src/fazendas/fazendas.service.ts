@@ -28,8 +28,8 @@ export class FazendasService {
       const fazenda = new Fazenda();
       fazenda.nome = nome;
       fazenda.tipoCoordenada = tipoCoordenada;
-      fazenda.coordenadas = coordenadas;
-
+      // fazenda.coordenadas = coordenadas;
+      
       return fazenda;
     });
 
@@ -58,7 +58,6 @@ export class FazendasService {
     fazenda.nome = updateFazendaDto.nome || fazenda.nome;
     fazenda.tipoCoordenada =
       updateFazendaDto.tipoCoordenada || fazenda.tipoCoordenada;
-    fazenda.coordenadas = updateFazendaDto.coordenadas || fazenda.coordenadas;
     return this.fazendasRepository.save(fazenda);
   }
 
