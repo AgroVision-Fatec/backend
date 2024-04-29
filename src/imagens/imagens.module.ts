@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { ImagensController } from './imagens.controller';
-import { ImagensService } from './imagens.service';
+// import { Module } from '@nestjs/common';
+// import { ImagensController } from './imagens.controller';
+// import { ImagensService } from './imagens.service';
 
-@Module({
-  controllers: [ImagensController],
-  providers: [ImagensService]
-})
-export class ImagensModule {}
+// @Module({
+//   controllers: [ImagensController],
+//   providers: [ImagensService]
+// })
+// export class ImagensModule {}

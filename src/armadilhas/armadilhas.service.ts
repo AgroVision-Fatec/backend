@@ -5,9 +5,11 @@ import { Armadilha } from './armadilhas.entity';
 import { CreateArmadilhaDto } from './dto/create-armadilhas.dto';
 import { UpdateArmadilhaDto } from './dto/update-armadilha.dto';
 import { ArmadilhaDeleteResponseDto } from './dto/response-delete-armadilha.dto';
+import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dados-armadilhas.dto';
 
 @Injectable()
 export class ArmadilhasService {
+  mapToResponseDto: any;
   constructor(
     @InjectRepository(Armadilha)
     private armadilhasRepository: Repository<Armadilha>,
@@ -35,7 +37,7 @@ export class ArmadilhasService {
   async update(
     id: number,
     updateArmadilhaDto: UpdateArmadilhaDto,
-  ): Promise<Armadilha> {
+  ): Promise<DadosArmadilhaResponseDto> {
     const armadilha = await this.armadilhasRepository.preload({
       id_armadilha: id,
       ...updateArmadilhaDto,
@@ -43,7 +45,8 @@ export class ArmadilhasService {
     if (!armadilha) {
       throw new NotFoundException(`Armadilha com ID ${id} não encontrada.`);
     }
-    return this.armadilhasRepository.save(armadilha);
+    const updatedArmadilha = await this.armadilhasRepository.save(armadilha);
+    return this.mapToResponseDto(updatedArmadilha); 
   }
 
   async remove(id: number): Promise<ArmadilhaDeleteResponseDto> {

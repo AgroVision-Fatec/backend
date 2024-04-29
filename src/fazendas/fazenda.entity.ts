@@ -30,7 +30,7 @@ export class Fazenda {
   nome_fazenda: string;
 
   @Column('varchar', { length: 45 })
-  tipo_coordenadas: string;
+  tipo_coordenadas?: string;
 
   @OneToMany(() => Talhao, (talhao) => talhao.fazenda)
   talhoes: Talhao[];

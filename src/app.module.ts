@@ -13,7 +13,7 @@ import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.modul
 import { GeojsonModule } from './geojson/geojson.module';
 import { FazendasCoordenadasModule } from './fazendas-coordenadas/fazendas-coordenadas.module';
 import { TalhoesCoordenadasModule } from './talhoes-coordenadas/talhoes-coordenadas.module';
-import { ImagensModule } from './imagens/imagens.module';
+// import { ImagensModule } from './imagens/imagens.module';
 
 @Module({
   imports: [
@@ -47,8 +47,8 @@ import { ImagensModule } from './imagens/imagens.module';
     DadosArmadilhasModule,
     GeojsonModule,
     FazendasCoordenadasModule,
-    TalhoesCoordenadasModule,
-    ImagensModule,
+    TalhoesCoordenadasModule
+    // ImagensModule,
   ],
   controllers: [AppController],
   providers: [AppService],
