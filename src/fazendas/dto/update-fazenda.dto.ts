@@ -21,6 +21,7 @@ export class UpdateFazendaDto {
   })
   @IsOptional()
   @IsString()
-  tipo_Coordenadas?: string;
+  nome: any;
+  tipoCoordenada: any;
 
 }
