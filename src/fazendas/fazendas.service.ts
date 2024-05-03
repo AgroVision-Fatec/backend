@@ -27,9 +27,10 @@ export class FazendasService {
       const coordenadas = JSON.stringify(feature.geometry.coordinates);
 
       const fazenda = new Fazenda();
-      fazenda.nome = nome;
-      fazenda.tipoCoordenada = tipoCoordenada;
+      fazenda.nome_fazenda = nome;
+      fazenda.tipo_coordenadas = tipoCoordenada;
       // fazenda.coordenadas = coordenadas;
+    
       
       return fazenda;
     });
