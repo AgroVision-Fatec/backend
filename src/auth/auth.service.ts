@@ -21,8 +21,10 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
+  
     const { email, password } = loginDto;
     // Implementar lógica de verificação de email e senha, retornar o token se válido
+    console.log('vou validar esse usuario:' + email, password)
     const user = await this.validateUser(email, password);
     if (!user) {
       throw new UnauthorizedException('Credenciais inválidas');
