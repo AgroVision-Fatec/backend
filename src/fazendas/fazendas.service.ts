@@ -38,7 +38,9 @@ export class FazendasService {
   } 
 
   async findAll(): Promise<FazendaResponseDto[]> {
-    const fazendas = await this.fazendasRepository.find();
+    const fazendas = await this.fazendasRepository.find({
+      relations: ['usuario']
+    });
     return fazendas.map(fazenda => {
       const responseDto: FazendaResponseDto = {
         id_fazenda: fazenda.id_fazenda,
@@ -54,7 +56,9 @@ export class FazendasService {
 
       const fazenda = await this.fazendasRepository.findOne({
       where: { id_fazenda: id },
+      relations: ['usuario']
     });
+    console.log(fazenda)
     if (!fazenda) {
       throw new NotFoundException(`Fazenda with ID ${id} not found`);
     }
@@ -62,7 +66,7 @@ export class FazendasService {
       id_fazenda: fazenda.id_fazenda,
       nome_fazenda: fazenda.nome,
       tipo_Coordenadas: fazenda.tipo_coordenadas,
-      id_usuario: fazenda.usuario.id_usuario,
+      id_usuario: fazenda?.usuario?.id_usuario??null,
     };
     
     return responseDto;

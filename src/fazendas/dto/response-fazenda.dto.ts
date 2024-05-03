@@ -20,5 +20,5 @@ export class FazendaResponseDto {
     example: 1,
     description: 'ID do usuário dono da fazenda',
   })
-  id_usuario: number;
+  id_usuario?: number;
 }

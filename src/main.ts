@@ -24,6 +24,8 @@ async function bootstrap() {
     }),
   });
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('API AGRO VISION')
     .setDescription('API para o projeto Agro Vision')
