@@ -29,6 +29,9 @@ export class User {
   @Column('varchar', { length: 255 })
   password: string;
 
+  @Column('varchar', { length: 25 })
+  role: string;
+
   @OneToMany(() => Fazenda, (fazenda) => fazenda.usuario)
   fazendas: Fazenda[];
 }

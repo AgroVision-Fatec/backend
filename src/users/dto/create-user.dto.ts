@@ -32,4 +32,10 @@ export class CreateUserDto {
   @IsString({ message: 'A senha deve ser uma string.' })
   @MinLength(8, { message: 'A senha deve ter pelo menos 8 caracteres.' })
   password: string;
+
+  @ApiProperty({
+    description: 'Role de usuário',
+    example: 'user',
+  })
+  role: string;
 }

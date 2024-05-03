@@ -18,6 +18,7 @@ export class UsersService {
     const user = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
+      role: 'user'
     });
     await this.usersRepository.save(user);
     return this.mapToUserResponseDto(user);
