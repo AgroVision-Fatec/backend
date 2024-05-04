@@ -29,6 +29,11 @@ export class FazendasService {
       const fazenda = new Fazenda();
       fazenda.nome_fazenda = nome;
       fazenda.tipo_coordenadas = tipoCoordenada;
+
+      //precisamos de uma lógica pra pegar o id_usuario que esta cadastrando uma fazenda
+      // fazenda.usuario = 
+
+
       // fazenda.coordenadas = coordenadas;
     
       
