@@ -44,9 +44,10 @@ export class FazendasController {
     description: 'Caminho do arquivo GeoJSON',
   })
   async createFromGeoJSON(
+    @Param('userId') userId: number,
     @Body('filePath') filePath: string,
   ): Promise<FazendaResponseDto[]> {
-    const fazendas = await this.fazendasService.createFromGeoJSON(filePath);
+    const fazendas = await this.fazendasService.createFromGeoJSON(userId, filePath);
     return fazendas.map(() => new FazendaResponseDto());
   }
 

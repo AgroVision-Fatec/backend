@@ -16,11 +16,10 @@ export class FazendasService {
     private readonly geojsonService: GeojsonService,
   ) {}
 
-  async createFromGeoJSON(salvo: any): Promise<Fazenda[]> {
+  async createFromGeoJSON(userId: any, salvo: any): Promise<Fazenda[]> {
     if (!salvo || !salvo.features) {
       throw new Error('Invalid GeoJSON data.');
     }
-
     const fazendas: Fazenda[] = salvo.features.map(feature => {
       const { FAZENDA: nome } = feature.properties;
       const tipoCoordenada = 'MultiPolygon';
@@ -29,19 +28,15 @@ export class FazendasService {
       const fazenda = new Fazenda();
       fazenda.nome_fazenda = nome;
       fazenda.tipo_coordenadas = tipoCoordenada;
-
-      //precisamos de uma lógica pra pegar o id_usuario que esta cadastrando uma fazenda
-      // fazenda.usuario = 
-
-
-      // fazenda.coordenadas = coordenadas;
-    
-      
+      fazenda.usuario = userId;      
       return fazenda;
     });
 
     return this.fazendasRepository.save(fazendas);
   } 
+
+
+
 
   async findAll(): Promise<FazendaResponseDto[]> {
     const fazendas = await this.fazendasRepository.find({
