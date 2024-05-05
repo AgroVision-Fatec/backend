@@ -21,13 +21,16 @@ export class TalhoesService {
   }
 
   async findAll(): Promise<TalhaoResponseDto[]> {
-    const talhoes = await this.talhoesRepository.find();
+    const talhoes = await this.talhoesRepository.find({
+      relations: ['fazenda'],
+    });
     return talhoes.map(talhao => this.mapToResponseDto(talhao));
   }
 
   async findOne(id: number): Promise<TalhaoResponseDto> {
     const talhao = await this.talhoesRepository.findOne({
       where: { id_talhao: id },
+      relations: ['fazenda'],
     });
     if (!talhao) {
       throw new NotFoundException(`Talhão com ID ${id} não encontrado.`);
