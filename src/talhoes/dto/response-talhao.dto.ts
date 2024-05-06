@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TalhaoResponseDto {
-  @ApiProperty({ example: 1, description: 'ID do talhão' })
+  @ApiProperty()
   id_talhao: number;
 
-  @ApiProperty({ example: 'Talhão 1', description: 'Nome do talhão' })
+  @ApiProperty()
   nome_talhao: string;
 
   @ApiProperty({
@@ -12,12 +12,6 @@ export class TalhaoResponseDto {
     description: 'Tipo de coordenada do talhão',
   })
   tipo_coordenada: string;
-
-  @ApiProperty({
-    example: '-15.7942287,-47.8821658',
-    description: 'Coordenadas do talhão',
-  })
-  coordenadas: string;
 
   @ApiProperty({ example: 1, description: 'ID da fazenda associada' })
   id_fazenda: number;

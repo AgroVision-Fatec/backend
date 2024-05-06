@@ -11,6 +11,9 @@ import { TalhoesModule } from './talhoes/talhoes.module';
 import { ArmadilhasModule } from './armadilhas/armadilhas.module';
 import { DadosArmadilhasModule } from './dados-armadilhas/dados-armadilhas.module';
 import { GeojsonModule } from './geojson/geojson.module';
+import { FazendasCoordenadasModule } from './fazendas-coordenadas/fazendas-coordenadas.module';
+import { TalhoesCoordenadasModule } from './talhoes-coordenadas/talhoes-coordenadas.module';
+// import { ImagensModule } from './imagens/imagens.module';
 
 @Module({
   imports: [
@@ -43,6 +46,9 @@ import { GeojsonModule } from './geojson/geojson.module';
     ArmadilhasModule,
     DadosArmadilhasModule,
     GeojsonModule,
+    FazendasCoordenadasModule,
+    TalhoesCoordenadasModule
+    // ImagensModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -24,6 +24,8 @@ import { ArmadilhaResponseDto } from './dto/response-armadilha.dto';
 import { CreateArmadilhaDto } from './dto/create-armadilhas.dto';
 import { UpdateArmadilhaDto } from './dto/update-armadilha.dto';
 import { ArmadilhaDeleteResponseDto } from './dto/response-delete-armadilha.dto';
+import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dados-armadilhas.dto';
+import { Armadilha } from './armadilhas.entity';
 
 @ApiTags('armadilhas')
 @ApiBearerAuth()
@@ -43,7 +45,7 @@ export class ArmadilhasController {
   @ApiBody({ type: CreateArmadilhaDto })
   async create(
     @Body() createArmadilhaDto: CreateArmadilhaDto,
-  ): Promise<ArmadilhaResponseDto> {
+  ): Promise<Armadilha> {
     return this.armadilhasService.create(createArmadilhaDto);
   }
 
@@ -54,7 +56,7 @@ export class ArmadilhasController {
     description: 'Armadilhas listadas com sucesso.',
     type: [ArmadilhaResponseDto],
   })
-  async findAll(): Promise<ArmadilhaResponseDto[]> {
+  async findAll(): Promise<Armadilha[]> {
     return this.armadilhasService.findAll();
   }
 
@@ -72,7 +74,7 @@ export class ArmadilhasController {
     description: 'ID da armadilha',
     type: Number,
   })
-  async findOne(@Param('id') id: number): Promise<ArmadilhaResponseDto> {
+  async findOne(@Param('id') id: number): Promise<Armadilha> {
     return this.armadilhasService.findOne(id);
   }
 
@@ -95,7 +97,7 @@ export class ArmadilhasController {
   async update(
     @Param('id') id: number,
     @Body() updateArmadilhaDto: UpdateArmadilhaDto,
-  ): Promise<ArmadilhaResponseDto> {
+  ): Promise<DadosArmadilhaResponseDto> {
     return this.armadilhasService.update(id, updateArmadilhaDto);
   }
 

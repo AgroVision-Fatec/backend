@@ -8,17 +8,17 @@ export class FazendaResponseDto {
     example: 'Fazenda Boa Esperança',
     description: 'Nome da fazenda',
   })
-  nome: string;
+  nome_fazenda: string;
 
   @ApiProperty({
     example: 'Geográfica',
     description: 'Tipo de coordenada da fazenda',
   })
-  tipoCoordenada: string;
+  tipo_Coordenadas: string;
 
   @ApiProperty({
-    example: '-15.7942287,-47.8821658',
-    description: 'Coordenadas da fazenda',
+    example: 1,
+    description: 'ID do usuário dono da fazenda',
   })
-  coordenadas: string;
+  id_usuario?: number;
 }

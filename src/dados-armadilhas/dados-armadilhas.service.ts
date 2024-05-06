@@ -23,12 +23,17 @@ export class DadosArmadilhasService {
   }
 
   async findAll(): Promise<DadosArmadilhas[]> {
-    return this.dadosArmadilhasRepository.find();
+    return this.dadosArmadilhasRepository.find(
+      {
+        relations: ['armadilha', 'armadilha.fazenda'],
+      }
+    );
   }
 
   async findOne(id: number): Promise<DadosArmadilhas> {
     const dadosArmadilha = await this.dadosArmadilhasRepository.findOne({
       where: { id_dados_armadilha: id },
+      relations: ['armadilha', 'armadilha.fazenda'],
     });
     if (!dadosArmadilha) {
       throw new NotFoundException(

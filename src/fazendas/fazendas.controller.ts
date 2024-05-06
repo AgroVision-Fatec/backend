@@ -44,9 +44,10 @@ export class FazendasController {
     description: 'Caminho do arquivo GeoJSON',
   })
   async createFromGeoJSON(
+    @Param('userId') userId: number,
     @Body('filePath') filePath: string,
   ): Promise<FazendaResponseDto[]> {
-    const fazendas = await this.fazendasService.createFromGeoJSON(filePath);
+    const fazendas = await this.fazendasService.createFromGeoJSON(userId, filePath);
     return fazendas.map(() => new FazendaResponseDto());
   }
 
@@ -78,6 +79,27 @@ export class FazendasController {
   async findOne(@Param('id') id: number): Promise<FazendaResponseDto> {
     return this.fazendasService.findOne(id);
   }
+
+
+
+  @Get('user/:userId')
+  @ApiOperation({ summary: 'Obter fazendas por um usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Operação bem-sucedida',
+    type: [FazendaResponseDto],
+  })
+  @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    description: 'ID do usuário',
+    type: 'number',
+  })
+  async find(@Param('userId') userId: number): Promise<FazendaResponseDto[]> {
+    return this.fazendasService.findAllByUserId(userId);
+  }
+  
 
   @Put(':id')
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
