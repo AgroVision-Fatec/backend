@@ -103,4 +103,19 @@ export class UsersController {
     await this.usersService.remove(id);
     return { message: 'Usuário deletado com sucesso.' };
   }
+
+
+@Get('email/:email')
+@ApiOperation({ summary: 'Encontrar um usuário pelo e-mail' })
+@ApiResponse({
+  status: 200,
+  description: 'Usuário encontrado',
+  type: UserResponseDto,
+})
+@ApiResponse({ status: 404, description: 'Usuário não encontrado' })
+@ApiParam({ name: 'email', description: 'E-mail do usuário' })
+  async findOneByEmail(@Param('email') email: string): Promise<UserResponseDto> {
+    const user = await this.usersService.findOneByEmail(email);
+    return user;
+}
 }

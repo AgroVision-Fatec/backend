@@ -69,9 +69,22 @@ export class FazendasService {
       tipo_Coordenadas: fazenda.tipo_coordenadas,
       id_usuario: fazenda?.usuario?.id_usuario??null,
     };
-    
     return responseDto;
-  
+  }
+
+
+  async findAllByUserId(userId: number): Promise<FazendaResponseDto[]> {
+    const fazendas = await this.fazendasRepository.find({
+      where: { usuario: { id_usuario: userId } },
+      relations: ['usuario']
+    });
+
+    return fazendas.map((fazenda) => ({
+      id_fazenda: fazenda.id_fazenda,
+      nome_fazenda: fazenda.nome_fazenda,
+      tipo_Coordenadas: fazenda.tipo_coordenadas,
+      id_usuario: fazenda.usuario ? fazenda.usuario.id_usuario : null,
+    }));
   }
 
   async update(

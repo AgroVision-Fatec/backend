@@ -80,6 +80,27 @@ export class FazendasController {
     return this.fazendasService.findOne(id);
   }
 
+
+
+  @Get('user/:userId')
+  @ApiOperation({ summary: 'Obter fazendas por um usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Operação bem-sucedida',
+    type: [FazendaResponseDto],
+  })
+  @ApiResponse({ status: 404, description: 'Usuário não encontrado' })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    description: 'ID do usuário',
+    type: 'number',
+  })
+  async find(@Param('userId') userId: number): Promise<FazendaResponseDto[]> {
+    return this.fazendasService.findAllByUserId(userId);
+  }
+  
+
   @Put(':id')
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   @ApiOperation({ summary: 'Atualizar uma fazenda pelo ID' })
