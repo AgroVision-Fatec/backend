@@ -28,8 +28,8 @@ import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dad
 import { Armadilha } from './armadilhas.entity';
 
 @ApiTags('armadilhas')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+// @ApiBearerAuth()
+// @UseGuards(JwtAuthGuard)
 @Controller('armadilhas')
 export class ArmadilhasController {
   constructor(private readonly armadilhasService: ArmadilhasService) {}
