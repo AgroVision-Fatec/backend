@@ -21,4 +21,10 @@ export class ArmadilhaResponseDto {
     description: 'ID do talhão associado à armadilha',
   })
   id_talhao: number;
+
+  @ApiProperty({
+    example: 'https://example.com/image.jpg',
+    description: 'URL da imagem da armadilha',
+  })
+  url_imagem: string;
 }
