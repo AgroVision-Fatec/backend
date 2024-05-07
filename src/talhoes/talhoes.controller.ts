@@ -28,8 +28,8 @@ import { Fazenda } from 'src/fazendas/fazenda.entity';
 import { Talhao } from './talhoes.entity';
 
 @ApiTags('talhoes')
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('talhoes')
 export class TalhoesController {
   constructor(private readonly talhoesService: TalhoesService) {}
@@ -61,7 +61,7 @@ export class TalhoesController {
     return this.talhoesService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Obter um talhão pelo ID' })
   @ApiResponse({
