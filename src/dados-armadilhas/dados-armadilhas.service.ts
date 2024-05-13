@@ -5,20 +5,34 @@ import { DadosArmadilhas } from './dados-armadilhas.entity';
 import { CreateDadosArmadilhaDto } from './dto/create-dados-armadilhas.dto';
 import { UpdateDadosArmadilhaDto } from './dto/update-dados-armadilhas.dto';
 import { DadosArmadilhaDeleteResponseDto } from './dto/response-delete-dados-armadilhas.dto';
+import { Armadilha } from 'src/armadilhas/armadilhas.entity';
 
 @Injectable()
 export class DadosArmadilhasService {
   constructor(
     @InjectRepository(DadosArmadilhas)
     private readonly dadosArmadilhasRepository: Repository<DadosArmadilhas>,
+    @InjectRepository(Armadilha)
+    private armadilhasRepository: Repository<Armadilha>,
   ) {}
 
   async create(
     createDadosArmadilhaDto: CreateDadosArmadilhaDto,
   ): Promise<DadosArmadilhas> {
-    const dadosArmadilha = this.dadosArmadilhasRepository.create(
-      createDadosArmadilhaDto,
-    );
+    const armadilha = await this.armadilhasRepository.findOne({
+      where: { id_armadilha: createDadosArmadilhaDto.id_armadilha }
+    });
+
+    if (!armadilha) {
+      throw new NotFoundException(`Armadilha com ID ${createDadosArmadilhaDto.id_armadilha} não encontrada.`);
+    }
+
+
+    const dadosArmadilha = this.dadosArmadilhasRepository.create({
+      ...createDadosArmadilhaDto,
+      armadilha: armadilha 
+    });
+    
     return this.dadosArmadilhasRepository.save(dadosArmadilha);
   }
 
