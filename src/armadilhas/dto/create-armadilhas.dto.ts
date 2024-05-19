@@ -24,4 +24,11 @@ export class CreateArmadilhaDto {
   })
   @IsInt()
   id_talhao: number;
+
+  @ApiProperty({
+    example: 'https://example.com/image.jpg',
+    description: 'URL da imagem da armadilha',
+  })
+  @IsString()
+  url_imagem: string;
 }

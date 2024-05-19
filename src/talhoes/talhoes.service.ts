@@ -6,6 +6,7 @@ import { CreateTalhaoDto } from './dto/create-talhao.dto';
 import { UpdateTalhaoDto } from './dto/update-talhao.dto';
 import { TalhaoDeleteResponseDto } from './dto/response-delete-talhao.dto';
 import { TalhaoResponseDto } from './dto/response-talhao.dto'; // Importe o DTO de resposta
+import { Fazenda } from 'src/fazendas/fazenda.entity';
 
 @Injectable()
 export class TalhoesService {
@@ -66,5 +67,13 @@ export class TalhoesService {
       tipo_coordenada: talhao.tipo_coordenadas,
       id_fazenda: talhao.fazenda.id_fazenda, 
     };
+  }
+
+  async FindByIdFazenda(idFazenda: number): Promise<Talhao[]> {
+    const talhoes = await this.talhoesRepository.find({
+      where: { fazenda: { id_fazenda: idFazenda } },
+      relations: ['fazenda']
+    });
+    return talhoes;
   }
 }

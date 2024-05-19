@@ -36,6 +36,9 @@ export class Armadilha {
   @Column('float') // Usando float para longitude
   longitude: number;
 
+  @Column('varchar', { length: 255, nullable: true }) // Adicionando nullable para permitir valores nulos
+  url_imagem: string;
+
   @ManyToOne(() => Talhao, (talhao) => talhao.armadilhas) // Relacionamento de muitos para um com Talhão
   @JoinColumn({ name: 'id_talhao' }) // Coluna de junção para a chave estrangeira
   talhao: Talhao;

@@ -6,28 +6,28 @@ import {
   Param,
   Put,
   Delete,
-  // UseGuards,
+  UseGuards,
   ValidationPipe,
   UsePipes,
 } from '@nestjs/common';
 import { FazendasService } from './fazendas.service';
-// import { CreateFazendaDto } from './dto/create-fazenda.dto';
+import { CreateFazendaDto } from './dto/create-fazenda.dto';
 import { UpdateFazendaDto } from './dto/update-fazenda.dto';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  // ApiBearerAuth,
+  ApiBearerAuth,
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-// import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FazendaDeleteResponseDto } from './dto/response-delete-fazenda.dto';
 import { FazendaResponseDto } from './dto/response-fazenda.dto';
 
 @ApiTags('fazendas')
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('fazendas')
 export class FazendasController {
   constructor(private readonly fazendasService: FazendasService) {}

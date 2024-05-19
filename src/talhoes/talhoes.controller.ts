@@ -24,6 +24,8 @@ import {
 } from '@nestjs/swagger';
 import { TalhaoResponseDto } from './dto/response-talhao.dto';
 import { TalhaoDeleteResponseDto } from './dto/response-delete-talhao.dto';
+import { Fazenda } from 'src/fazendas/fazenda.entity';
+import { Talhao } from './talhoes.entity';
 
 @ApiTags('talhoes')
 @ApiBearerAuth()
@@ -122,5 +124,23 @@ export class TalhoesController {
   })
   async remove(@Param('id') id: number): Promise<TalhaoDeleteResponseDto> {
     return this.talhoesService.remove(id);
+  }
+
+
+  @Get('findByIdFazenda/:idFazenda')
+  @ApiOperation({ summary: 'Encontrar talhões por ID da fazenda' })
+  @ApiResponse({
+    status: 200,
+    description: 'Talhões encontrados',
+    type: [TalhaoResponseDto], 
+  })
+  @ApiResponse({ status: 404, description: 'Nenhum talhão encontrado' })
+  @ApiParam({ name: 'idFazenda', description: 'ID da fazenda' })
+  async findOneByEmail(@Param('idFazenda') idFazenda: number): Promise<Talhao[]> {
+    try {
+      return await this.talhoesService.FindByIdFazenda(idFazenda);
+    } catch (error) {
+      console.log('erro ao buscar talhoes por id fazenda');
+    }
   }
 }

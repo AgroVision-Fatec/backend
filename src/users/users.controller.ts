@@ -42,7 +42,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Obter todos os usuários' })
@@ -89,7 +89,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar um usuário' })
