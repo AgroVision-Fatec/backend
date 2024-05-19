@@ -6,6 +6,8 @@ import { UpdateFazendaDto } from './dto/update-fazenda.dto';
 // import * as fs from 'fs'
 import { GeojsonService } from 'src/geojson/geojson.service';
 import { FazendaResponseDto } from './dto/response-fazenda.dto';
+import { FazendaCoordenadas } from 'src/fazendas-coordenadas/fazenda-coordenadas.entity';
+
 
 @Injectable()
 export class FazendasService {
@@ -20,6 +22,7 @@ export class FazendasService {
     if (!salvo || !salvo.features) {
       throw new Error('Invalid GeoJSON data.');
     }
+
     const fazendas: Fazenda[] = salvo.features.map(feature => {
       const { FAZENDA: nome } = feature.properties;
       const tipoCoordenada = 'MultiPolygon';
@@ -28,11 +31,12 @@ export class FazendasService {
       const fazenda = new Fazenda();
       fazenda.nome_fazenda = nome;
       fazenda.tipo_coordenadas = tipoCoordenada;
-      fazenda.usuario = userId;      
+      fazenda.usuario = userId;   
+         
       return fazenda;
     });
 
-    return this.fazendasRepository.save(fazendas);
+    return this.fazendasRepository.save(fazendas );
   } 
 
 
