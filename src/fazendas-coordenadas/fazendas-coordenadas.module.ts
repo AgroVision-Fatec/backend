@@ -4,6 +4,7 @@ import { FazendasCoordenadasService } from './fazendas-coordenadas.service';
 
 @Module({
   controllers: [FazendasCoordenadasController],
-  providers: [FazendasCoordenadasService]
+  providers: [FazendasCoordenadasService],
+  exports: [FazendasCoordenadasService],
 })
 export class FazendasCoordenadasModule {}

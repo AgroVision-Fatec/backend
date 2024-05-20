@@ -46,5 +46,4 @@ export class Fazenda {
   coordenadas: FazendaCoordenadas[];
   tipoCoordenada: any;
   nome: any;
-  fazendasCoordenadas: any;
 }
