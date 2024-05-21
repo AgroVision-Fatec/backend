@@ -56,4 +56,12 @@ export class ArmadilhasService {
     }
     return { message: 'Armadilha deletada com sucesso.' };
   }
+
+  async FindByIdTalhao(idTalhao: number): Promise<Armadilha[]> {
+    const armadilhas = await this.armadilhasRepository.find({
+      where: { talhao: { id_talhao: idTalhao } },
+      relations: ['talhao']
+    });
+    return armadilhas;
+    }
 }
