@@ -42,7 +42,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get()
   @ApiOperation({ summary: 'Obter todos os usuários' })
@@ -52,6 +52,7 @@ export class UsersController {
     type: [UserResponseDto],
   })
   async findAll(): Promise<UserResponseDto[]> {
+    // pegando o usuario atual pelo token
     return this.usersService.findAll();
   }
 
