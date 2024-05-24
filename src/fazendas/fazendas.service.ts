@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Fazenda } from './fazenda.entity';
 import { UpdateFazendaDto } from './dto/update-fazenda.dto';
 // import * as fs from 'fs'
 import { GeojsonService } from 'src/geojson/geojson.service';
 import { FazendaResponseDto } from './dto/response-fazenda.dto';
-import { FazendaCoordenadas } from 'src/fazendas-coordenadas/fazenda-coordenadas.entity';
+import { FazendasCoordenadasService } from 'src/fazendas-coordenadas/fazendas-coordenadas.service';
 
 @Injectable()
 export class FazendasService {
@@ -14,6 +14,8 @@ export class FazendasService {
     @InjectRepository(Fazenda)
     private fazendasRepository: Repository<Fazenda>,
     private readonly geojsonService: GeojsonService,
+    private fazendaCoordenadasService: FazendasCoordenadasService,
+    private readonly entityManager: EntityManager,
   ) {}
 
   async createFromGeoJSON(userId: any, salvo: any): Promise<Fazenda[]> {
@@ -21,20 +23,37 @@ export class FazendasService {
       throw new Error('Invalid GeoJSON data.');
     }
 
-    const fazendas: Fazenda[] = salvo.features.map((feature) => {
+    const fazendas: Fazenda[] = [];
+
+    // Primeira etapa: cadastrar todas as fazendas
+    for (const feature of salvo.features) {
       const { FAZENDA: nome } = feature.properties;
       const tipoCoordenada = 'MultiPolygon';
-      const coords = feature.geometry.coordinates[0][0];
 
       const fazenda = new Fazenda();
       fazenda.nome_fazenda = nome;
       fazenda.tipo_coordenadas = tipoCoordenada;
       fazenda.usuario = userId;
 
-      return fazenda;
-    });
+      await this.fazendasRepository.save(fazenda);
+      fazendas.push(fazenda);
+    }
 
-    return this.fazendasRepository.save(fazendas);
+    // Segunda etapa: cadastrar as coordenadas para cada fazenda
+    for (const fazenda of fazendas) {
+      const feature = salvo.features.find(
+        (f) => f.properties.FAZENDA === fazenda.nome_fazenda,
+      );
+      if (feature) {
+        const coords = feature.geometry.coordinates[0][0];
+        const fazendaCoordenadasArray =
+          await this.fazendaCoordenadasService.create(coords, fazenda);
+        fazenda.coordenadas = fazendaCoordenadasArray;
+        await this.fazendasRepository.save(fazenda);
+      }
+    }
+
+    return fazendas;
   }
 
   async findAll(): Promise<FazendaResponseDto[]> {
