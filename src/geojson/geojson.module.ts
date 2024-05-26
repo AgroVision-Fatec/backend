@@ -5,6 +5,7 @@ import { extname } from 'path';
 import { GeojsonController } from './geojson.controller';
 import { GeojsonService } from './geojson.service';
 import { FazendasModule } from '../fazendas/fazendas.module';
+import { TalhoesModule } from 'src/talhoes/talhoes.module';
 
 @Module({
   imports: [
@@ -17,10 +18,12 @@ import { FazendasModule } from '../fazendas/fazendas.module';
         },
       }),
     }),
-    forwardRef(() => FazendasModule), // Usando forwardRef para evitar dependência circular
+    forwardRef(() => TalhoesModule),
+    forwardRef(() => FazendasModule),
+
   ],
   controllers: [GeojsonController],
   providers: [GeojsonService],
-  exports: [GeojsonService, MulterModule], // Exportando o GeojsonService e MulterModule
+  exports: [GeojsonService, MulterModule],
 })
 export class GeojsonModule {}

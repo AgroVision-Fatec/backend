@@ -25,7 +25,6 @@ export class FazendasService {
 
     const fazendas: Fazenda[] = [];
 
-    // Primeira etapa: cadastrar todas as fazendas
     for (const feature of salvo.features) {
       const { FAZENDA: nome } = feature.properties;
       const tipoCoordenada = 'MultiPolygon';

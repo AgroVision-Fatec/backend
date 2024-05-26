@@ -21,9 +21,9 @@ export class UsersService {
       email: createUserDto.email,
     });
 
-    if (isExistentUser) {
-      throw new ConflictException('Usuário já cadastrado');
-    }
+    // if (isExistentUser) {
+    //   throw new ConflictException('Usuário já cadastrado');
+    // }
     const user = this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,

@@ -143,4 +143,19 @@ export class TalhoesController {
       console.log('erro ao buscar talhoes por id fazenda');
     }
   }
+  @Post('geojson')
+  @ApiOperation({ summary: 'Criar talhões a partir de um arquivo GeoJSON' })
+  @ApiResponse({
+    status: 201,
+    description: 'Os talhões foram criados com sucesso.',
+    type: [TalhaoResponseDto],
+  })
+  @ApiBody({
+    description: 'Dados do arquivo GeoJSON',
+  })
+  async createFromGeoJSONS(@Body() geoJSON: any): Promise<TalhaoResponseDto[]> {
+    const talhoes = await this.talhoesService.createFromGeoJSONS(geoJSON);
+    return talhoes.map(talhao => this.talhoesService.mapToResponseDto(talhao));
+  }
 }
+

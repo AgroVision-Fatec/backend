@@ -4,13 +4,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponse, ApiOperation, ApiTags, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { GeojsonService } from './geojson.service';
 import { FazendasService } from '../fazendas/fazendas.service';
-
+import { TalhoesService } from 'src/talhoes/talhoes.service'; 
+import { TalhoesModule } from 'src/talhoes/talhoes.module';
 @ApiTags('geojson')
 @Controller('geojson')
 export class GeojsonController {
   constructor(
     private readonly geojsonService: GeojsonService,
-    private readonly fazendasService: FazendasService
+    private readonly fazendasService: FazendasService,
+    private readonly talhoesService: TalhoesService
   ) {}
 
   @Post('upload/:userId')
@@ -30,6 +32,8 @@ export class GeojsonController {
   async uploadFile(@Param('userId') userId: number,@UploadedFile() file: Express.Multer.File): Promise<any> {
     const salvo = await this.geojsonService.readGeoJSON(file.path);
     await this.fazendasService.createFromGeoJSON(userId, salvo);
+    // await this.talhoesService.createFromGeoJSONS(salvo);
     return salvo;
   }
 }
+// 
