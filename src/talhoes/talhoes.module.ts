@@ -4,18 +4,19 @@ import { TalhoesService } from './talhoes.service';
 import { TalhoesController } from './talhoes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Talhao } from './talhoes.entity';
-import { Fazenda } from 'src/fazendas/fazenda.entity';
-import { TalhoesCoordenadas } from 'src/talhoes-coordenadas/talhoes-coordenadas.entity';
 import { TalhoesCoordenadasModule } from 'src/talhoes-coordenadas/talhoes-coordenadas.module';
 import { GeojsonModule } from 'src/geojson/geojson.module';
+import { FazendasModule } from 'src/fazendas/fazendas.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Talhao, Fazenda, TalhoesCoordenadas]),
+    TypeOrmModule.forFeature([Talhao]),
     forwardRef(() => GeojsonModule),
-    TalhoesCoordenadasModule,
+    forwardRef(() => TalhoesCoordenadasModule),
+    forwardRef(() => FazendasModule),
   ],
   providers: [TalhoesService],
   controllers: [TalhoesController],
+  exports: [TalhoesService],
 })
 export class TalhoesModule {}

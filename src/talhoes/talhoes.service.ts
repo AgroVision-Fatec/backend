@@ -5,24 +5,17 @@ import { Repository } from 'typeorm';
 import { CreateTalhaoDto } from './dto/create-talhao.dto';
 import { UpdateTalhaoDto } from './dto/update-talhao.dto';
 import { TalhaoDeleteResponseDto } from './dto/response-delete-talhao.dto';
-import { TalhaoResponseDto } from './dto/response-talhao.dto'; 
-import { Fazenda } from 'src/fazendas/fazenda.entity';
-import { TalhoesCoordenadas } from 'src/talhoes-coordenadas/talhoes-coordenadas.entity';
+import { TalhaoResponseDto } from './dto/response-talhao.dto';
 import { TalhoesCoordenadasService } from 'src/talhoes-coordenadas/talhoes-coordenadas.service';
-import { GeojsonService } from 'src/geojson/geojson.service';
+import { FazendasService } from 'src/fazendas/fazendas.service';
 @Injectable()
 export class TalhoesService {
   constructor(
     @InjectRepository(Talhao)
     private talhoesRepository: Repository<Talhao>,
-    // private readonly geojsonService: GeojsonService,
-    @InjectRepository(Fazenda)
-    private fazendasRepository: Repository<Fazenda>,
-    @InjectRepository(TalhoesCoordenadas)
-    private talhoesCoordenadasRepository: Repository<TalhoesCoordenadas>,
-    private readonly talhoesCoordenadasService: TalhoesCoordenadasService,
+    private talhoesCoordenadasService: TalhoesCoordenadasService,
+    private fazendasService: FazendasService,
   ) {}
-
 
   async createFromGeoJSONS(geoJSON: any): Promise<Talhao[]> {
     if (!geoJSON || !geoJSON.features) {
@@ -32,16 +25,14 @@ export class TalhoesService {
     const talhoes: Talhao[] = [];
 
     for (const feature of geoJSON.features) {
-      const nome = feature.properties.NAME; 
+      const nome = feature.properties.NAME;
       const tipoCoordenada = 'MultiPolygon';
 
       const talhao = new Talhao();
       talhao.nome_talhao = nome;
       talhao.tipo_coordenadas = tipoCoordenada;
 
-      const fazenda = await this.fazendasRepository.findOne({
-        where: { id_fazenda: 1 },
-      });
+      const fazenda = await this.fazendasService.findByFazendaId(1);
 
       if (!fazenda) {
         throw new Error(`Fazenda com ID 1 não encontrada.`);
@@ -53,7 +44,9 @@ export class TalhoesService {
     }
 
     for (const talhao of talhoes) {
-      const feature = geoJSON.features.find(f => f.properties.NAME === talhao.nome_talhao);
+      const feature = geoJSON.features.find(
+        (f) => f.properties.NAME === talhao.nome_talhao,
+      );
       if (feature) {
         const coords = feature.geometry.coordinates[0][0];
         await this.talhoesCoordenadasService.create(coords, talhao);
@@ -62,13 +55,16 @@ export class TalhoesService {
 
     return talhoes;
   }
+
   async create(createTalhaoDto: CreateTalhaoDto): Promise<TalhaoResponseDto> {
-    const fazenda = await this.fazendasRepository.findOne({
-      where: { id_fazenda: createTalhaoDto.id_fazenda },
-    });
+    const fazenda = await this.fazendasService.findOneByIdFazenda(
+      createTalhaoDto.id_fazenda,
+    );
 
     if (!fazenda) {
-      throw new NotFoundException(`Fazenda com ID ${createTalhaoDto.id_fazenda} não encontrada.`);
+      throw new NotFoundException(
+        `Fazenda com ID ${createTalhaoDto.id_fazenda} não encontrada.`,
+      );
     }
 
     const talhao = new Talhao();
@@ -84,7 +80,7 @@ export class TalhoesService {
     const talhoes = await this.talhoesRepository.find({
       relations: ['fazenda'],
     });
-    return talhoes.map(talhao => this.mapToResponseDto(talhao));
+    return talhoes.map((talhao) => this.mapToResponseDto(talhao));
   }
 
   async findOne(id: number): Promise<TalhaoResponseDto> {
@@ -98,7 +94,10 @@ export class TalhoesService {
     return this.mapToResponseDto(talhao);
   }
 
-  async update(id: number, updateTalhaoDto: UpdateTalhaoDto): Promise<TalhaoResponseDto> {
+  async update(
+    id: number,
+    updateTalhaoDto: UpdateTalhaoDto,
+  ): Promise<TalhaoResponseDto> {
     const talhao = await this.talhoesRepository.preload({
       id_talhao: id,
       ...updateTalhaoDto,
@@ -124,14 +123,14 @@ export class TalhoesService {
       id_talhao: talhao.id_talhao,
       nome_talhao: talhao.nome_talhao,
       tipo_coordenada: talhao.tipo_coordenadas,
-      id_fazenda: talhao.fazenda.id_fazenda, 
+      id_fazenda: talhao.fazenda.id_fazenda,
     };
   }
 
   async FindByIdFazenda(idFazenda: number): Promise<Talhao[]> {
     const talhoes = await this.talhoesRepository.find({
       where: { fazenda: { id_fazenda: idFazenda } },
-      relations: ['fazenda']
+      relations: ['fazenda'],
     });
     return talhoes;
   }
