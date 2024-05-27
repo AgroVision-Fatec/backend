@@ -77,7 +77,7 @@ export class ArmadilhasService {
     return armadilhas;
   }
 
-  async createFromGeoJSONS(geoJSON: any, userId: number): Promise<Armadilha[]> {
+  async createFromGeoJSONS(geoJSON: any, talhaoId: number): Promise<Armadilha[]> {
     if (!geoJSON || !geoJSON.features) {
       throw new Error('Invalid GeoJSON data.');
     }
@@ -90,16 +90,18 @@ export class ArmadilhasService {
       armadilha.latitude = feature.geometry.coordinates[0];
       armadilha.longitude = feature.geometry.coordinates[1];
       armadilha.tipo_coordenada = tipoCoordenada;
+      
 
-      const talhao = await this.talhaoService.findOne(
+      const talhao = await this.talhaoService.findbyidTalhao(
         feature.properties.id_talhao,
       );
+      console.log(talhao)
       if (!talhao) {
         throw new Error(
           `Talhão com ID ${feature.properties.id_talhao} não encontrado.`,
         );
       }
-      armadilha.talhao = talhao[0];
+      armadilha.talhao = talhao;
       await this.armadilhasRepository.save(armadilha);
       armadilhas.push(armadilha);
     }

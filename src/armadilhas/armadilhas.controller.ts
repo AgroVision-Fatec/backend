@@ -148,7 +148,7 @@ export class ArmadilhasController {
     }
   }
 
-  @Post('upload/:userId')
+  @Post('upload/:talhaoId')
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Upload a GeoJSON file' })
   @ApiResponse({
@@ -166,11 +166,11 @@ export class ArmadilhasController {
     },
   })
   async createFromGeoJSONS(
-    @Param('userId') userId: number,
+    @Param('talhaoId') talhaoId: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
     const salvo = await this.geojsonService.readGeoJSON(file.path);
-    const armadila = await this.armadilhasService.createFromGeoJSONS(salvo, userId);
+    const armadila = await this.armadilhasService.createFromGeoJSONS(salvo, talhaoId);
     return armadila.map(talhao => this.armadilhasService.mapToResponseDto(talhao));
   }
 }
