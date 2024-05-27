@@ -28,8 +28,8 @@ import { Fazenda } from 'src/fazendas/fazenda.entity';
 import { Talhao } from './talhoes.entity';
 
 @ApiTags('talhoes')
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('talhoes')
 export class TalhoesController {
   constructor(private readonly talhoesService: TalhoesService) {}
@@ -61,7 +61,7 @@ export class TalhoesController {
     return this.talhoesService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Obter um talhão pelo ID' })
   @ApiResponse({
@@ -143,4 +143,19 @@ export class TalhoesController {
       console.log('erro ao buscar talhoes por id fazenda');
     }
   }
+  @Post('geojson')
+  @ApiOperation({ summary: 'Criar talhões a partir de um arquivo GeoJSON' })
+  @ApiResponse({
+    status: 201,
+    description: 'Os talhões foram criados com sucesso.',
+    type: [TalhaoResponseDto],
+  })
+  @ApiBody({
+    description: 'Dados do arquivo GeoJSON',
+  })
+  async createFromGeoJSONS(@Body() geoJSON: any): Promise<TalhaoResponseDto[]> {
+    const talhoes = await this.talhoesService.createFromGeoJSONS(geoJSON);
+    return talhoes.map(talhao => this.talhoesService.mapToResponseDto(talhao));
+  }
 }
+

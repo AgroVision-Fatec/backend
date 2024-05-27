@@ -52,6 +52,7 @@ export class UsersController {
     type: [UserResponseDto],
   })
   async findAll(): Promise<UserResponseDto[]> {
+    // pegando o usuario atual pelo token
     return this.usersService.findAll();
   }
 
@@ -89,7 +90,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar um usuário' })

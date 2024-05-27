@@ -28,8 +28,8 @@ import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dad
 import { Armadilha } from './armadilhas.entity';
 
 @ApiTags('armadilhas')
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('armadilhas')
 export class ArmadilhasController {
   constructor(private readonly armadilhasService: ArmadilhasService) {}
@@ -117,5 +117,25 @@ export class ArmadilhasController {
   })
   async remove(@Param('id') id: number): Promise<ArmadilhaDeleteResponseDto> {
     return this.armadilhasService.remove(id);
+  }
+
+
+
+
+  @Get('findByIdTalhao/:idTalhao')
+  @ApiOperation({ summary: 'Encontrar armadilhas por ID do Talhao' })
+  @ApiResponse({
+    status: 200,
+    description: 'Armadilhas encontrados',
+    type: [ArmadilhaResponseDto], 
+  })
+  @ApiResponse({ status: 404, description: 'Nenhuma Armadilha encontrado' })
+  @ApiParam({ name: 'idTalhao', description: 'ID do talhao' })
+  async findOneByEmail(@Param('idTalhao') idTalhao: number): Promise<Armadilha[]> {
+    try {
+      return await this.armadilhasService.FindByIdTalhao(idTalhao);
+    } catch (error) {
+      console.log('erro ao buscar armadilhas por id talhao');
+    }
   }
 }
