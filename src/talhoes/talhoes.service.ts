@@ -17,7 +17,7 @@ export class TalhoesService {
     private fazendasService: FazendasService,
   ) {}
 
-  async createFromGeoJSONS(geoJSON: any): Promise<Talhao[]> {
+  async createFromGeoJSONS(geoJSON: any, userId: number): Promise<Talhao[]> {
     if (!geoJSON || !geoJSON.features) {
       throw new Error('Invalid GeoJSON data.');
     }
