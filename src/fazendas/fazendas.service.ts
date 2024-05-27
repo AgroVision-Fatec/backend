@@ -73,7 +73,7 @@ export class FazendasService {
   async findOne(id: number): Promise<FazendaResponseDto> {
     const fazenda = await this.fazendasRepository.findOne({
       where: { id_fazenda: id },
-      relations: ['usuario'],
+      relations: ['usuario','talhoes' ],
     });
     console.log(fazenda);
     if (!fazenda) {
@@ -84,6 +84,7 @@ export class FazendasService {
       nome_fazenda: fazenda.nome,
       tipo_Coordenadas: fazenda.tipo_coordenadas,
       id_usuario: fazenda?.usuario?.id_usuario ?? null,
+      talhao: fazenda.talhoes
     };
     return responseDto;
   }
@@ -139,5 +140,30 @@ export class FazendasService {
     if (result.affected === 0) {
       throw new NotFoundException(`Fazenda with ID ${id} not found`);
     }
+  }
+
+
+
+
+
+
+
+  async findTudo(id: number): Promise<FazendaResponseDto> {
+    const fazenda = await this.fazendasRepository.findOne({
+      where: { id_fazenda: id },
+      relations: ['usuario','talhoes' ],
+    });
+    console.log(fazenda);
+ 
+    const responseDto: FazendaResponseDto = {
+      id_fazenda: fazenda.id_fazenda,
+      nome_fazenda: fazenda.nome,
+      tipo_Coordenadas: fazenda.tipo_coordenadas,
+      id_usuario: fazenda?.usuario?.id_usuario ?? null,
+      talhao: fazenda.talhoes,
+  
+
+    };
+    return responseDto;
   }
 }

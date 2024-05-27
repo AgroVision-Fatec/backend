@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Talhao } from 'src/talhoes/talhoes.entity';
 
 export class FazendaResponseDto {
   @ApiProperty({ example: 1, description: 'ID da fazenda' })
@@ -21,4 +22,10 @@ export class FazendaResponseDto {
     description: 'ID do usuário dono da fazenda',
   })
   id_usuario?: number;
+
+  @ApiProperty({
+    example: 1,
+    description: 'ID do usuário dono da fazenda',
+  })
+  talhao?: any;
 }
