@@ -7,6 +7,7 @@ import { UpdateFazendaDto } from './dto/update-fazenda.dto';
 import { GeojsonService } from 'src/geojson/geojson.service';
 import { FazendaResponseDto } from './dto/response-fazenda.dto';
 import { FazendasCoordenadasService } from 'src/fazendas-coordenadas/fazendas-coordenadas.service';
+import { FazendaALLDTO } from './dto/fazenda_allDTO';
 
 @Injectable()
 export class FazendasService {
@@ -148,22 +149,35 @@ export class FazendasService {
 
 
 
-  async findTudo(id: number): Promise<FazendaResponseDto> {
+  async findTudo(id: number): Promise<FazendaALLDTO> {
     const fazenda = await this.fazendasRepository.findOne({
       where: { id_fazenda: id },
-      relations: ['usuario','talhoes' ],
+      relations: ['usuario', 'talhoes', 'talhoes.coordenadas'],
     });
-    console.log(fazenda);
- 
-    const responseDto: FazendaResponseDto = {
+
+    if (!fazenda) {
+      throw new NotFoundException(`Fazenda with ID ${id} not found`);
+    }
+
+    const talhoes = fazenda.talhoes.map(talhao => ({
+      id: talhao.id_talhao,
+      nome: talhao.nome_talhao,
+      coordenadas: talhao.coordenadas.map(coord => ({
+        id: coord.id_coordenada,
+        latitude: coord.latitude,
+        longitude: coord.longitude,
+      })),
+    }));
+
+    const responseDto: FazendaALLDTO = {
       id_fazenda: fazenda.id_fazenda,
       nome_fazenda: fazenda.nome,
       tipo_Coordenadas: fazenda.tipo_coordenadas,
-      id_usuario: fazenda?.usuario?.id_usuario ?? null,
-      talhao: fazenda.talhoes,
-  
-
+      id_usuario: fazenda.usuario?.id_usuario ?? null,
+      talhoes: talhoes,
     };
+    
     return responseDto;
   }
+
 }
