@@ -1,9 +1,19 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { FazendasCoordenadasService } from './fazendas-coordenadas.service';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FazendaCoordsResponseDto } from './dto/FazendaCoordsResponseDto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('fazendas-coordenadas')
+@ApiTags('fazendas-coordenadas')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 export class FazendasCoordenadasController {
   constructor(
     private readonly fazendasCoordenadasService: FazendasCoordenadasService,
