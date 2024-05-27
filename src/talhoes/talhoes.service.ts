@@ -17,7 +17,7 @@ export class TalhoesService {
     private fazendasService: FazendasService,
   ) {}
 
-  async createFromGeoJSONS(geoJSON: any, userId: number): Promise<Talhao[]> {
+  async createFromGeoJSONS(geoJSON: any, fazendaId: number): Promise<Talhao[]> {
     if (!geoJSON || !geoJSON.features) {
       throw new Error('Invalid GeoJSON data.');
     }
@@ -32,7 +32,7 @@ export class TalhoesService {
       talhao.nome_talhao = nome;
       talhao.tipo_coordenadas = tipoCoordenada;
 
-      const fazenda = await this.fazendasService.findByFazendaId(1);
+      const fazenda = await this.fazendasService.findByFazendaId(fazendaId);
 
       if (!fazenda) {
         throw new Error(`Fazenda com ID 1 não encontrada.`);

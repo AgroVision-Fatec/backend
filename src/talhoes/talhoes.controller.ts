@@ -166,9 +166,9 @@ export class TalhoesController {
     },
   })
   async createFromGeoJSONS(
-    @Param('userId') userId: number, @UploadedFile() file: Express.Multer.File): Promise<any> {
+    @Param('fazendaId') fazendaId: number, @UploadedFile() file: Express.Multer.File): Promise<any> {
     const salvo = await this.geojsonService.readGeoJSON(file.path);
-    const talhoes = await this.talhoesService.createFromGeoJSONS(salvo, userId);
+    const talhoes = await this.talhoesService.createFromGeoJSONS(salvo, fazendaId);
     return talhoes.map(talhao => this.talhoesService.mapToResponseDto(talhao));
   }
 }
