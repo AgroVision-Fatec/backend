@@ -10,21 +10,22 @@ export class ArmadilhaResponseDto {
   })
   tipo_coordenada: string;
 
+  // latitude
   @ApiProperty({
-    example: '-15.7942287,-47.8821658',
-    description: 'Coordenadas da armadilha',
+    example: -12.345678,
+    description: 'Latitude da localização da armadilha',
   })
-  coordenadas: string;
+  latitude: number;
+  // longitude
+  @ApiProperty({
+    example: -12.345678,
+    description: 'Longitude da localização da armadilha',
+  })
+  longitude: number;
 
   @ApiProperty({
     example: 1,
     description: 'ID do talhão associado à armadilha',
   })
-  id_talhao: number;
-
-  @ApiProperty({
-    example: 'https://example.com/image.jpg',
-    description: 'URL da imagem da armadilha',
-  })
-  url_imagem: string;
+  talhao: any;
 }

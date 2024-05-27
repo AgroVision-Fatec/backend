@@ -88,28 +88,28 @@ export class ArmadilhasController {
     return this.armadilhasService.findOne(id);
   }
 
-  @Put(':id')
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @ApiOperation({ summary: 'Atualizar uma armadilha pelo ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'A armadilha foi atualizada com sucesso.',
-    type: ArmadilhaResponseDto,
-  })
-  @ApiResponse({ status: 404, description: 'Armadilha não encontrada' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'ID da armadilha que será atualizada',
-    type: Number,
-  })
-  @ApiBody({ type: UpdateArmadilhaDto })
-  async update(
-    @Param('id') id: number,
-    @Body() updateArmadilhaDto: UpdateArmadilhaDto,
-  ): Promise<DadosArmadilhaResponseDto> {
-    return this.armadilhasService.update(id, updateArmadilhaDto);
-  }
+  // @Put(':id')
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  // @ApiOperation({ summary: 'Atualizar uma armadilha pelo ID' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'A armadilha foi atualizada com sucesso.',
+  //   type: ArmadilhaResponseDto,
+  // })
+  // @ApiResponse({ status: 404, description: 'Armadilha não encontrada' })
+  // @ApiParam({
+  //   name: 'id',
+  //   required: true,
+  //   description: 'ID da armadilha que será atualizada',
+  //   type: Number,
+  // })
+  // @ApiBody({ type: UpdateArmadilhaDto })
+  // async update(
+  //   @Param('id') id: number,
+  //   @Body() updateArmadilhaDto: UpdateArmadilhaDto,
+  // ): Promise<DadosArmadilhaResponseDto> {
+  //   return this.armadilhasService.update(id, updateArmadilhaDto);
+  // }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar uma armadilha pelo ID' })
