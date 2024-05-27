@@ -10,5 +10,6 @@ import { Armadilha } from 'src/armadilhas/armadilhas.entity';
   imports: [TypeOrmModule.forFeature([DadosArmadilhas, Armadilha])],
   providers: [DadosArmadilhasService],
   controllers: [DadosArmadilhasController],
+  exports: [DadosArmadilhasService],
 })
 export class DadosArmadilhasModule {}

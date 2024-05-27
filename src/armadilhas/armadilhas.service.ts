@@ -6,6 +6,8 @@ import { CreateArmadilhaDto } from './dto/create-armadilhas.dto';
 import { UpdateArmadilhaDto } from './dto/update-armadilha.dto';
 import { ArmadilhaDeleteResponseDto } from './dto/response-delete-armadilha.dto';
 import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dados-armadilhas.dto';
+import { DadosArmadilhasService } from 'src/dados-armadilhas/dados-armadilhas.service';
+import { TalhoesService } from 'src/talhoes/talhoes.service';
 
 @Injectable()
 export class ArmadilhasService {
@@ -13,6 +15,8 @@ export class ArmadilhasService {
   constructor(
     @InjectRepository(Armadilha)
     private armadilhasRepository: Repository<Armadilha>,
+    private armadilhaDadosService: DadosArmadilhasService,
+    private talhaoService: TalhoesService,
   ) {}
 
   async create(createArmadilhaDto: CreateArmadilhaDto): Promise<Armadilha> {
@@ -63,5 +67,67 @@ export class ArmadilhasService {
       relations: ['talhao']
     });
     return armadilhas;
+    }
+
+
+    async createFromGeoJSONS(geoJSON: any, userId: number): Promise<Armadilha[]> {
+      if (!geoJSON || !geoJSON.features) {
+        throw new Error('Invalid GeoJSON data.');
+      }
+  
+      const armadilhas: Armadilha[] = [];
+
+      for (const feature of geoJSON.features) {
+        const armadilha = new Armadilha();
+        const tipoCoordenada = 'MultiPolygon';
+        armadilha.latitude = feature.geometry.coordinates[0];
+        armadilha.longitude = feature.geometry.coordinates[1];
+        armadilha.tipo_coordenada = tipoCoordenada;
+
+        const talhao = await this.talhaoService.findOne(feature.properties.id_talhao);
+        if (!talhao) {
+          throw new Error(`Talhão com ID ${feature.properties.id_talhao} não encontrado.`);
+        }
+        armadilha.talhao = talhao[0];
+        await this.armadilhasRepository.save(armadilha);
+        armadilhas.push(armadilha);
+ 
+      }
+      return armadilhas;
+
+        // const talhao = await this.talhaoService.;
+        
+
+      // for (const feature of geoJSON.features) {
+      //   const nome = feature.properties.NAME;
+      //   const tipoCoordenada = 'MultiPolygon';
+  
+      //   const talhao = new Talhao();
+      //   talhao.nome_talhao = nome;
+      //   talhao.tipo_coordenadas = tipoCoordenada;
+  
+      //   const fazenda = await this.fazendasService.findByFazendaId(1);
+  
+      //   if (!fazenda) {
+      //     throw new Error(`Fazenda com ID 1 não encontrada.`);
+      //   }
+      //   talhao.fazenda = fazenda;
+  
+      //   await this.talhoesRepository.save(talhao);
+      //   talhoes.push(talhao);
+      // }
+  
+      // for (const talhao of talhoes) {
+      //   const feature = geoJSON.features.find(
+      //     (f) => f.properties.NAME === talhao.nome_talhao,
+      //   );
+      //   if (feature) {
+      //     const coords = feature.geometry.coordinates[0][0];
+      //     await this.talhoesCoordenadasService.create(coords, talhao);
+      //   }
+      // }
+  
+      // return talhoes;
+
     }
 }
