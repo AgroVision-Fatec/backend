@@ -15,9 +15,9 @@ export class TalhoesService {
     private talhoesRepository: Repository<Talhao>,
     private talhoesCoordenadasService: TalhoesCoordenadasService,
     private fazendasService: FazendasService,
-  ) {}
+  ) { }
 
-  async createFromGeoJSONS(geoJSON: any): Promise<Talhao[]> {
+  async createFromGeoJSONS(geoJSON: any, fazendaId: number): Promise<Talhao[]> {
     if (!geoJSON || !geoJSON.features) {
       throw new Error('Invalid GeoJSON data.');
     }
@@ -32,7 +32,7 @@ export class TalhoesService {
       talhao.nome_talhao = nome;
       talhao.tipo_coordenadas = tipoCoordenada;
 
-      const fazenda = await this.fazendasService.findByFazendaId(1);
+      const fazenda = await this.fazendasService.findByFazendaId(fazendaId);
 
       if (!fazenda) {
         throw new Error(`Fazenda com ID 1 não encontrada.`);
@@ -92,6 +92,14 @@ export class TalhoesService {
       throw new NotFoundException(`Talhão com ID ${id} não encontrado.`);
     }
     return this.mapToResponseDto(talhao);
+  }
+
+  async findbyidTalhao(id: number): Promise<any> {
+    const talhao = await this.talhoesRepository.findOneBy({
+      id_talhao: id
+    })
+
+    return talhao
   }
 
   async update(

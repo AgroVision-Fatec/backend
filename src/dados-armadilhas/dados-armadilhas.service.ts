@@ -57,6 +57,18 @@ export class DadosArmadilhasService {
     return dadosArmadilha;
   }
 
+
+  async findByLatest(id: number): Promise<DadosArmadilhas> {
+    // Busca todas as inserções da tabela dados-armadilhas onde armadilha.id_armadilha seja igual a X
+    const dadosArmadilhas = await this.dadosArmadilhasRepository.findOne({
+      where: { armadilha: { id_armadilha: id } },
+      order: { data_coleta: 'DESC' },
+      relations: ['armadilha'],
+    });
+
+    return dadosArmadilhas;
+  }
+
   async update(
     id: number,
     updateDadosArmadilhaDto: UpdateDadosArmadilhaDto,

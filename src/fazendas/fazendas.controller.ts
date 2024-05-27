@@ -80,6 +80,19 @@ export class FazendasController {
     return this.fazendasService.findOne(id);
   }
 
+  @Get('tudo/:id')
+  @ApiOperation({ summary: 'Obter *' })
+  @ApiResponse({
+    status: 200,
+    description: 'Operação bem-sucedida',
+    type: FazendaResponseDto,
+  })
+  @ApiResponse({ status: 404, description: '*  não encontrada' })
+  async findTudo(@Param('id') id: number): Promise<FazendaResponseDto> {
+    return this.fazendasService.findTudo(id);
+  }
+
+
 
 
   @Get('user/:userId')

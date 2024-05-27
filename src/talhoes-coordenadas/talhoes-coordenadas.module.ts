@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Talhao } from 'src/talhoes/talhoes.entity';
 import { TalhoesCoordenadas } from 'src/talhoes-coordenadas/talhoes-coordenadas.entity';
 import { TalhoesCoordenadasService } from 'src/talhoes-coordenadas/talhoes-coordenadas.service'
+import { TalhoesCoordenadasController } from './talhoes-coordenadas.controller';
 
 
 
@@ -14,6 +15,7 @@ import { TalhoesCoordenadasService } from 'src/talhoes-coordenadas/talhoes-coord
     TalhoesCoordenadasService,
 
   ],
+  controllers: [TalhoesCoordenadasController],
   exports: [TalhoesCoordenadasService],
 })
-export class TalhoesCoordenadasModule {}
+export class TalhoesCoordenadasModule { }

@@ -9,6 +9,8 @@ import {
   UseGuards,
   ValidationPipe,
   UsePipes,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { ArmadilhasService } from './armadilhas.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -19,6 +21,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiConsumes,
 } from '@nestjs/swagger';
 import { ArmadilhaResponseDto } from './dto/response-armadilha.dto';
 import { CreateArmadilhaDto } from './dto/create-armadilhas.dto';
@@ -26,13 +29,20 @@ import { UpdateArmadilhaDto } from './dto/update-armadilha.dto';
 import { ArmadilhaDeleteResponseDto } from './dto/response-delete-armadilha.dto';
 import { DadosArmadilhaResponseDto } from 'src/dados-armadilhas/dto/response-dados-armadilhas.dto';
 import { Armadilha } from './armadilhas.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { GeojsonService } from 'src/geojson/geojson.service';
+import { DadosArmadilhasService } from 'src/dados-armadilhas/dados-armadilhas.service';
 
 @ApiTags('armadilhas')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('armadilhas')
 export class ArmadilhasController {
-  constructor(private readonly armadilhasService: ArmadilhasService) {}
+  constructor(
+    private readonly armadilhasService: ArmadilhasService,
+    private readonly geojsonService: GeojsonService,
+    private readonly dadosArmadilhasService: DadosArmadilhasService,
+  ) {}
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -78,28 +88,28 @@ export class ArmadilhasController {
     return this.armadilhasService.findOne(id);
   }
 
-  @Put(':id')
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @ApiOperation({ summary: 'Atualizar uma armadilha pelo ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'A armadilha foi atualizada com sucesso.',
-    type: ArmadilhaResponseDto,
-  })
-  @ApiResponse({ status: 404, description: 'Armadilha não encontrada' })
-  @ApiParam({
-    name: 'id',
-    required: true,
-    description: 'ID da armadilha que será atualizada',
-    type: Number,
-  })
-  @ApiBody({ type: UpdateArmadilhaDto })
-  async update(
-    @Param('id') id: number,
-    @Body() updateArmadilhaDto: UpdateArmadilhaDto,
-  ): Promise<DadosArmadilhaResponseDto> {
-    return this.armadilhasService.update(id, updateArmadilhaDto);
-  }
+  // @Put(':id')
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  // @ApiOperation({ summary: 'Atualizar uma armadilha pelo ID' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'A armadilha foi atualizada com sucesso.',
+  //   type: ArmadilhaResponseDto,
+  // })
+  // @ApiResponse({ status: 404, description: 'Armadilha não encontrada' })
+  // @ApiParam({
+  //   name: 'id',
+  //   required: true,
+  //   description: 'ID da armadilha que será atualizada',
+  //   type: Number,
+  // })
+  // @ApiBody({ type: UpdateArmadilhaDto })
+  // async update(
+  //   @Param('id') id: number,
+  //   @Body() updateArmadilhaDto: UpdateArmadilhaDto,
+  // ): Promise<DadosArmadilhaResponseDto> {
+  //   return this.armadilhasService.update(id, updateArmadilhaDto);
+  // }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar uma armadilha pelo ID' })
@@ -119,23 +129,48 @@ export class ArmadilhasController {
     return this.armadilhasService.remove(id);
   }
 
-
-
-
   @Get('findByIdTalhao/:idTalhao')
   @ApiOperation({ summary: 'Encontrar armadilhas por ID do Talhao' })
   @ApiResponse({
     status: 200,
     description: 'Armadilhas encontrados',
-    type: [ArmadilhaResponseDto], 
+    type: [ArmadilhaResponseDto],
   })
   @ApiResponse({ status: 404, description: 'Nenhuma Armadilha encontrado' })
   @ApiParam({ name: 'idTalhao', description: 'ID do talhao' })
-  async findOneByEmail(@Param('idTalhao') idTalhao: number): Promise<Armadilha[]> {
+  async findOneByEmail(
+    @Param('idTalhao') idTalhao: number,
+  ): Promise<Armadilha[]> {
     try {
       return await this.armadilhasService.FindByIdTalhao(idTalhao);
     } catch (error) {
       console.log('erro ao buscar armadilhas por id talhao');
     }
+  }
+
+  @Post('upload/:talhaoId')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Upload a GeoJSON file' })
+  @ApiResponse({
+    status: 200,
+    description: 'The file has been successfully uploaded.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  async createFromGeoJSONS(
+    @Param('talhaoId') talhaoId: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<any> {
+    const salvo = await this.geojsonService.readGeoJSON(file.path);
+    const armadila = await this.armadilhasService.createFromGeoJSONS(salvo, talhaoId);
+    return armadila.map(talhao => this.armadilhasService.mapToResponseDto(talhao));
   }
 }

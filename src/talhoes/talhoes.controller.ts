@@ -9,6 +9,8 @@ import {
   UseGuards,
   ValidationPipe,
   UsePipes,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { TalhoesService } from './talhoes.service';
 import { CreateTalhaoDto } from './dto/create-talhao.dto';
@@ -21,33 +23,38 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiConsumes,
 } from '@nestjs/swagger';
 import { TalhaoResponseDto } from './dto/response-talhao.dto';
 import { TalhaoDeleteResponseDto } from './dto/response-delete-talhao.dto';
 import { Fazenda } from 'src/fazendas/fazenda.entity';
 import { Talhao } from './talhoes.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { GeojsonService } from 'src/geojson/geojson.service';
 
 @ApiTags('talhoes')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('talhoes')
 export class TalhoesController {
-  constructor(private readonly talhoesService: TalhoesService) {}
+  constructor(private readonly talhoesService: TalhoesService,
+    private readonly geojsonService: GeojsonService,
+  ) { }
 
-  @Post()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @ApiOperation({ summary: 'Criar um novo talhão' })
-  @ApiResponse({
-    status: 201,
-    description: 'O talhão foi criado com sucesso.',
-    type: TalhaoResponseDto,
-  })
-  @ApiBody({ type: CreateTalhaoDto })
-  async create(
-    @Body() createTalhaoDto: CreateTalhaoDto,
-  ): Promise<TalhaoResponseDto> {
-    return this.talhoesService.create(createTalhaoDto);
-  }
+  // @Post()
+  // @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  // @ApiOperation({ summary: 'Criar um novo talhão' })
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'O talhão foi criado com sucesso.',
+  //   type: TalhaoResponseDto,
+  // })
+  // @ApiBody({ type: CreateTalhaoDto })
+  // async create(
+  //   @Body() createTalhaoDto: CreateTalhaoDto,
+  // ): Promise<TalhaoResponseDto> {
+  //   return this.talhoesService.create(createTalhaoDto);
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -132,7 +139,7 @@ export class TalhoesController {
   @ApiResponse({
     status: 200,
     description: 'Talhões encontrados',
-    type: [TalhaoResponseDto], 
+    type: [TalhaoResponseDto],
   })
   @ApiResponse({ status: 404, description: 'Nenhum talhão encontrado' })
   @ApiParam({ name: 'idFazenda', description: 'ID da fazenda' })
@@ -143,18 +150,25 @@ export class TalhoesController {
       console.log('erro ao buscar talhoes por id fazenda');
     }
   }
-  @Post('geojson')
-  @ApiOperation({ summary: 'Criar talhões a partir de um arquivo GeoJSON' })
-  @ApiResponse({
-    status: 201,
-    description: 'Os talhões foram criados com sucesso.',
-    type: [TalhaoResponseDto],
-  })
+
+  @Post('upload/:userId')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Upload a GeoJSON file' })
+  @ApiResponse({ status: 200, description: 'The file has been successfully uploaded.' })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'Dados do arquivo GeoJSON',
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
   })
-  async createFromGeoJSONS(@Body() geoJSON: any): Promise<TalhaoResponseDto[]> {
-    const talhoes = await this.talhoesService.createFromGeoJSONS(geoJSON);
+  async createFromGeoJSONS(
+    @Param('fazendaId') fazendaId: number, @UploadedFile() file: Express.Multer.File): Promise<any> {
+    const salvo = await this.geojsonService.readGeoJSON(file.path);
+    const talhoes = await this.talhoesService.createFromGeoJSONS(salvo, fazendaId);
     return talhoes.map(talhao => this.talhoesService.mapToResponseDto(talhao));
   }
 }
