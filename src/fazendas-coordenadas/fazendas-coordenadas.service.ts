@@ -24,4 +24,10 @@ export class FazendasCoordenadasService {
 
     return fazendaCoordenadasArray;
   }
+
+  async getCoordsFazenda(fazendaId: number): Promise<any> {
+    return await this.fazendaCoordenadasRepository.find({
+      where: { fazenda: { id_fazenda: fazendaId } },
+    });
+  }
 }
