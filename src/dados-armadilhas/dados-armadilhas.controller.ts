@@ -130,4 +130,28 @@ export class DadosArmadilhasController {
   ): Promise<DadosArmadilhaDeleteResponseDto> {
     return this.dadosArmadilhasService.remove(id);
   }
+
+
+
+  @Get('/findByLatest/:id')
+  @ApiOperation({ summary: 'Obter dados de uma armadilha pelo ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Dados da armadilha obtidos com sucesso.',
+    type: DadosArmadilhaResponseDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Dados da armadilha não encontrados',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID do registro de dados da armadilha',
+    type: Number,
+    required: true,
+  })
+  async findByLatest(@Param('id') id: number): Promise<DadosArmadilhas> {
+    return this.dadosArmadilhasService.findByLatest(id);
+  }
+
 }
